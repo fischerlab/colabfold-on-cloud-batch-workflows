@@ -28,8 +28,8 @@ runColabfoldPipeline:
         assign:
           - batchApi: "batch.googleapis.com/v1"
           - batchApiUrl: ${"https://" + batchApi + "/projects/" + args.project_id + "/locations/" + args.region + "/jobs"}
-          - maxRetryCount: 2
-          - maxRunDuration: "7200s"
+          - maxRetryCount: 3
+          - maxRunDuration: "172800s"
     - runColabfoldPipelineCloudBatchJobs:
         parallel:
           concurrency_limit: ${args.parallelism}
@@ -72,6 +72,11 @@ runColabfoldPipeline:
                             memoryMib: ${args.memory_mib}
                             bootDiskMib: ${args.boot_disk_mib}
                           maxRetryCount: ${maxRetryCount}
+                          lifecyclePolicies:
+                            - action: RETRY_TASK
+                              actionCondition:
+                                exitCodes:
+                                  - 50001
                           maxRunDuration: ${maxRunDuration}
                         taskCount: 1 
                       allocationPolicy:
@@ -104,7 +109,7 @@ runColabfoldPipeline:
               - sleep:
                   call: sys.sleep
                   args:
-                    seconds: 10
+                    seconds: 600
                   next: getJob
               - recordBatchJobCompletion:
                   call: googleapis.firestore.v1.projects.databases.documents.patch
