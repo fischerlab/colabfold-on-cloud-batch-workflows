@@ -83,7 +83,7 @@ The components of the solution - the container image, the inference workflow and
 #### Clone the repo
 
 ```
-git clone https://github.com/GoogleCloudPlatform/colabfold-on-cloud-batch-workflows
+git clone https://github.com/fischerlab/colabfold-on-cloud-batch-workflows.git
 ```
 
 #### Submit a Cloud Build job
